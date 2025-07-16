@@ -6,68 +6,66 @@ const produtoController = new ProdutoController();
 let opcao: number;
 
 do {
-    console.log("___________________________");
-    console.log("\n===== LOJA DE JOGOS =====");
-    console.log("___________________________\n");
-    console.log("Menu de Opções:");
-    console.log("___________________________");
-    console.log("|1 - Cadastrar Jogo");
-    console.log("|2 - Listar Jogos");
-    console.log("|3 - Atualizar Jogo");
-    console.log("|4 - Deletar Jogo");
-    console.log("|0 - Sair");
+    console.log("\n===============================");
+    console.log("🎮  Bem-vindo à Loja de Jogos");
+    console.log("===============================\n");
+    console.log("1 - Cadastrar novo jogo");
+    console.log("2 - Listar jogos");
+    console.log("3 - Atualizar jogo");
+    console.log("4 - Remover jogo");
+    console.log("0 - Sair");
 
-    opcao = parseInt(readlineSync.question("Escolha uma opcao: "));
+    opcao = parseInt(readlineSync.question("\nEscolha uma opção: "));
 
     switch (opcao) {
         case 1:
-            console.log("\n--- Cadastrar Jogo ---");
-            const titulo = readlineSync.question("Titulo: ");
-            const preco = parseFloat(readlineSync.question("Preco: "));
-            const genero = readlineSync.question("Genero: ");
+            console.log("\n📥 Cadastro de Jogo");
+            const titulo = readlineSync.question("Título: ").trim();
+            const preco = parseFloat(readlineSync.question("Preço (ex: 59.90): "));
+            const genero = readlineSync.question("Gênero: ").trim();
+
+            if (!titulo || isNaN(preco) || !genero) {
+                console.log("❌ Dados inválidos. Tente novamente.");
+                break;
+            }
+
             const novoJogo = new Jogo(0, titulo, preco, genero);
             produtoController.cadastrar(novoJogo);
             break;
 
         case 2:
-            console.log("\n--- Lista de Jogos ---");
+            console.log("\n📋 Lista de Jogos Cadastrados");
             produtoController.listarTodos();
             break;
 
         case 3:
-            console.log("\n--- Atualizar Jogo ---");
+            console.log("\n✏️ Atualizar Jogo");
             const idAtualizar = parseInt(readlineSync.question("ID do jogo: "));
-            const jogoExistente = produtoController['produtos'].find(p => p.id === idAtualizar);
+            const jogoExistente = produtoController.buscarPorId(idAtualizar);
 
             if (jogoExistente) {
-                const novoTitulo = readlineSync.question("Novo título: ");
+                const novoTitulo = readlineSync.question("Novo título: ").trim();
                 const novoPreco = parseFloat(readlineSync.question("Novo preço: "));
-                const novoGenero = readlineSync.question("Novo gênero: ");
+                const novoGenero = readlineSync.question("Novo gênero: ").trim();
 
                 const jogoAtualizado = new Jogo(idAtualizar, novoTitulo, novoPreco, novoGenero);
                 produtoController.atualizar(jogoAtualizado);
             } else {
-                console.log("❌ Jogo não encontrado.");
+                console.log("❌ Jogo com esse ID não foi encontrado.");
             }
             break;
 
         case 4:
-            console.log("\n--- Deletar Jogo ---");
+            console.log("\n🗑️ Remover Jogo");
             const idDeletar = parseInt(readlineSync.question("ID do jogo: "));
-            const jogoParaDeletar = produtoController['produtos'].find(p => p.id === idDeletar);
-
-            if (jogoParaDeletar) {
-                produtoController.deletar(idDeletar);
-            } else {
-                console.log("❌ Jogo não encontrado.");
-            }
+            produtoController.deletar(idDeletar);
             break;
 
         case 0:
-            console.log("Encerrando o sistema...");
+            console.log("\n👋 Encerrando... Até logo!");
             break;
 
         default:
-            console.log("Opção invalida.");
+            console.log("⚠️ Opção inválida. Tente novamente.");
     }
 } while (opcao !== 0);

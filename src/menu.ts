@@ -44,4 +44,3 @@ do {
             console.log("Opção inválida.");
     }
 } while (opcao !== 0);
-console.log("Obrigado por usar a loja de jogos!");
